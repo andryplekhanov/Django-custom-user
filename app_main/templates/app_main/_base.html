@@ -1,0 +1,22 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+</head>
+<body>
+
+    {% include 'app_main/header.html' %}
+
+    {% block middle %}
+    {% endblock middle %}
+
+    {% include 'app_main/footer.html' %}
+
+</body>
+</html>
