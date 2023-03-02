@@ -1,0 +1,15 @@
+{% extends 'app_main/_base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block middle %}
+    <div>
+        <p>{% trans 'We have sent a confirmation link to your email' %}.</p>
+        <p>{% trans 'Please follow the link to complete the registration' %}.</p>
+        <p>{% trans "If it hasn't arrived, check the spam folder." %}</p>
+    </div>
+{% endblock %}

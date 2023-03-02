@@ -1,0 +1,9 @@
+{% load i18n %}
+{% autoescape off %}
+
+{% trans 'Hello, you have registered on the website ' %} {{ domain }}
+{% trans 'Please follow the link to complete the registration' %}:
+
+http://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}
+
+{% endautoescape %}

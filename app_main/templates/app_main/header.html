@@ -19,6 +19,6 @@
     {% if request.user.is_authenticated %}
         <a href="{% url 'logout' %}">{% trans 'Log out' %}</a>
     {% else %}
-        <a href="{% url 'login' %}">{% trans 'Log in' %}</a>
+        <a href="{% url 'login' %}">{% trans 'Sign Up / Log In' %}</a>
     {% endif %}
 </div>

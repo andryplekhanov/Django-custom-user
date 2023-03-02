@@ -34,9 +34,9 @@
             <div>
                 <button type="submit">{% trans 'Log in' %}</button>
             </div>
-{#            <div>{% trans "I don't have an account yet." %}#}
-{#                <a href="{% url 'signup' %}">{% trans "Sign up" %}</a>#}
-{#            </div>#}
+            <div>{% trans "I don't have an account yet." %}
+                <a href="{% url 'signup' %}">{% trans "Sign up" %}</a>
+            </div>
             <div>{% trans "I don't remember my password." %}
                 <a href="{% url 'password_reset' %}">{% trans "Reset Password" %}</a>
             </div>
