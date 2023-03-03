@@ -1,7 +1,10 @@
-from django.contrib.auth import login, get_user_model
+from django.contrib import messages
+from django.contrib.auth import login, get_user_model, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator as token_generator
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, \
-    PasswordResetConfirmView, PasswordResetCompleteView
+    PasswordResetConfirmView, PasswordResetCompleteView, PasswordChangeView
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -9,31 +12,30 @@ from django.urls import reverse_lazy, reverse
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 
-from app_users.forms import UserLoginForm, ResetPasswordForm, PasswordSetForm, CustomUserCreationForm
+from app_users.forms import UserLoginForm, ResetPasswordForm, PasswordSetForm, CustomUserCreationForm, EditProfileForm
 from app_users.utils import send_email_for_verify, authenticate_user
 
 User = get_user_model()
 
 
 class LogInView(LoginView):
-    """
-    Log in to your account View.
-    If the user is registered, but his email is not confirmed,
-    then we send him a confirmation email again.
-    """
+    """ Log in to your account View """
     template_name = 'app_users/login.html'
     authentication_form = UserLoginForm
     next_page = reverse_lazy('home')
     extra_context = {'title': _('Log In')}
 
-    def form_valid(self, form):
-        user = form.get_user()
-        if not user.email_confirmed:
-            send_email_for_verify(self.request, user)
-            return HttpResponseRedirect(reverse('confirm_email'))
-        return super().form_valid(form)
+    # Uncomment the code below.
+    # Users will not be able to access their personal account if their email is not confirmed.
+    # A confirmation email will be sent.
+    # def form_valid(self, form):
+    #     user = form.get_user()
+    #     if not user.email_confirmed:
+    #         send_email_for_verify(self.request, user)
+    #         return HttpResponseRedirect(reverse('confirm_email'))
+    #     return super().form_valid(form)
 
 
 class LogOutView(LogoutView):
@@ -56,6 +58,25 @@ class SignUp(CreateView):
             send_email_for_verify(request, user)
             return redirect('confirm_email')
         return super().post(request, *args, **kwargs)
+
+
+class EditPasswordView(LoginRequiredMixin, PasswordChangeView):
+    """ Edit Password View """
+    template_name = 'app_users/edit_password.html'
+    success_url = reverse_lazy('profile')
+    extra_context = {'title': _('Edit Password')}
+
+
+class EditProfileView(LoginRequiredMixin, UpdateView):
+    """ Edit Password View """
+    model = User
+    template_name = 'app_users/edit_profile.html'
+    form_class = EditProfileForm
+    success_url = reverse_lazy('profile')
+    extra_context = {'title': _('Edit Profile')}
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class EmailVerify(View):
@@ -110,3 +131,19 @@ class ResetPasswordCompleteView(PasswordResetCompleteView):
     """ Password Reset Complete View """
     template_name = 'app_users/password_reset_complete.html'
     extra_context = {'title': _('Password Reset Complete')}
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """ Profile View """
+    template_name = "app_users/profile.html"
+    extra_context = {'title': _('Profile')}
+
+
+@login_required
+def confirm_email(request):
+    """ sends email for verification again for authenticated users from personal account """
+    user = request.user
+    if not user.email_confirmed:
+        send_email_for_verify(request, user)
+        return HttpResponseRedirect(reverse('confirm_email'))
+    return HttpResponseRedirect(reverse('home'))

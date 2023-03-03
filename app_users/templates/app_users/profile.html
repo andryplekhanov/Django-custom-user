@@ -1,0 +1,36 @@
+{% extends 'app_main/_base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block middle %}
+    <div>
+        <h1>{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</h1>
+        <h2>{{ user.username }}</h2>
+    </div>
+    <div>
+        {% if user.avatar %}
+            <div><img src="{{ user.avatar.url }}" alt="card.jpg"/></div>
+        {% else %}
+            <div>
+                <img src="{% static 'assets/img/no_img.jpg' %}" alt="profile-image.jpg"/>
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <p>
+            E-mail: {{ user.email }}
+            {% if user.email_confirmed %}✅
+            {% else %}❌ (<a href="{% url 'send_email_for_verify' %}">{% trans 'verify email' %}</a>)
+            {% endif %}
+        </p>
+        <p>{% trans 'Phone number' %}: {{ user.phone_number }}</p>
+    </div>
+    <div>
+        <button onclick='window.location.href = "{% url 'edit_profile' %}";'>{% trans 'Edit profile' %}</button>
+        <button onclick='window.location.href = "{% url 'edit_password' %}";'>{% trans 'Change password' %}</button>
+    </div>
+{% endblock %}

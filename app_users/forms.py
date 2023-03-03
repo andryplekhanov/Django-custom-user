@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, UserCreationForm, \
+    UserChangeForm
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -46,6 +47,53 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2')
+
+
+class EditProfileForm(UserChangeForm):
+    first_name = forms.CharField(max_length=55, required=False, label=_('First_name'),
+                                 widget=forms.TextInput(attrs={
+                                     'class': 'form-input',
+                                     'data-validate': 'require',
+                                     'placeholder': _('Enter your first name'),
+                                     'maxlength': '55'
+                                 }))
+    last_name = forms.CharField(max_length=55, required=False, label=_('Last_name'),
+                                widget=forms.TextInput(attrs={
+                                    'class': 'form-input',
+                                    'data-validate': 'require',
+                                    'placeholder': _('Enter your last name'),
+                                    'maxlength': '55'
+                                }))
+    patronymic = forms.CharField(max_length=55, required=False, label=_('Patronymic'),
+                                 widget=forms.TextInput(attrs={
+                                     'class': 'form-input',
+                                     'data-validate': 'require',
+                                     'placeholder': _('Enter your patronymic'),
+                                     'maxlength': '55'
+                                 }))
+    username = forms.SlugField(max_length=55, required=False, label=_('Username'),
+                               widget=forms.TextInput(attrs={
+                                   'class': 'form-input',
+                                   'data-validate': 'require',
+                                   'placeholder': _('Enter your username'),
+                                   'maxlength': '55'
+                               }))
+    email = forms.EmailField(max_length=250, label='email', required=True,
+                             widget=forms.TextInput(attrs={
+                                 'class': 'form-input',
+                                 'data-validate': 'require',
+                                 'maxlength': '250',
+                                 'placeholder': _('Enter your email'),
+                             }))
+    phone_number = forms.CharField(required=False, label=_('Phone number'),
+                                   widget=forms.TextInput(attrs={
+                                       'class': 'form-input',
+                                       'placeholder': _('Enter your phone number'),
+                                   }))
+
+    class Meta:
+        model = get_user_model()
+        fields = ('email', 'username', 'first_name', 'last_name', 'patronymic', 'phone_number')
 
 
 class ResetPasswordForm(PasswordResetForm):
