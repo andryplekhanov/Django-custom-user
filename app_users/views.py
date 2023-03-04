@@ -68,7 +68,7 @@ class EditPasswordView(LoginRequiredMixin, PasswordChangeView):
 
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
-    """ Edit Password View """
+    """ Edit Profile View """
     model = User
     template_name = 'app_users/edit_profile.html'
     form_class = EditProfileForm

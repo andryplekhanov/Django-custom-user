@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # LocaleMiddleware must be right after SessionMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -114,12 +115,20 @@ AUTH_USER_MODEL = 'app_users.CustomUser'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+LANGUAGES = [
+    ('ru', 'rus'),
+    ('en', 'eng'),
+]
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale/')]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -132,9 +141,9 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
-FIXTURE_DIRS = (
-    os.path.join(BASE_DIR, 'fixtures'),
-)
+# FIXTURE_DIRS = (
+#     os.path.join(BASE_DIR, 'fixtures'),
+# )
 
 
 # Default primary key field type

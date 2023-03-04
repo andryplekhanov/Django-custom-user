@@ -50,14 +50,14 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class EditProfileForm(UserChangeForm):
-    first_name = forms.CharField(max_length=55, required=False, label=_('First_name'),
+    first_name = forms.CharField(max_length=55, required=False, label=_('First name'),
                                  widget=forms.TextInput(attrs={
                                      'class': 'form-input',
                                      'data-validate': 'require',
                                      'placeholder': _('Enter your first name'),
                                      'maxlength': '55'
                                  }))
-    last_name = forms.CharField(max_length=55, required=False, label=_('Last_name'),
+    last_name = forms.CharField(max_length=55, required=False, label=_('Last name'),
                                 widget=forms.TextInput(attrs={
                                     'class': 'form-input',
                                     'data-validate': 'require',
